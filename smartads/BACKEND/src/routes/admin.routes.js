@@ -1,0 +1,11 @@
+'use strict';
+const router = require('express').Router();
+const controller = require('../controllers/admin.controller');
+const { authenticate, requireRole } = require('../middleware/auth');
+router.use(authenticate, requireRole('admin'));
+router.get('/users', controller.listUsers);
+router.patch('/users/:id', controller.updateUser);
+router.delete('/users/:id', controller.deleteUser);
+router.post('/bookings/:id/stop', controller.stopBooking);
+router.patch('/bookings/:id/extend', controller.extendBooking);
+module.exports = router;

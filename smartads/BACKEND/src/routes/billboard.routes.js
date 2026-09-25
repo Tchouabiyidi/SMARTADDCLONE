@@ -1,0 +1,10 @@
+'use strict';
+const router = require('express').Router();
+const controller = require('../controllers/billboard.controller');
+const { authenticate, requireRole } = require('../middleware/auth');
+router.use(authenticate);
+router.get('/', controller.list);
+router.post('/', requireRole('owner'), controller.create);
+router.get('/:id/availability', controller.availability);
+router.patch('/:id', requireRole('owner'), controller.update);
+module.exports = router;

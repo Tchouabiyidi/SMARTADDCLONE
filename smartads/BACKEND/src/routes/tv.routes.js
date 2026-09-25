@@ -1,0 +1,17 @@
+'use strict';
+const router = require('express').Router();
+const controller = require('../controllers/tv.controller');
+const { authenticate, requireRole } = require('../middleware/auth');
+router.post('/pairings', controller.startPairing);
+router.get('/pairings/lookup', authenticate, controller.lookupByUserCode);
+router.get('/pairings/:id/status', controller.pairingStatus);
+router.post('/pairings/:id/approve', authenticate, controller.approvePairing);
+router.get('/devices', authenticate, requireRole('owner', 'admin'), controller.listDevices);
+router.delete('/devices/:id', authenticate, requireRole('owner', 'admin'), controller.revokeDevice);
+router.post('/unpair', controller.authenticateDevice, controller.unpairDevice);
+router.get('/schedule', controller.authenticateDevice, controller.schedule);
+router.post('/heartbeat', controller.authenticateDevice, controller.heartbeat);
+router.post('/events', controller.authenticateDevice, controller.event);
+router.get('/media/:reviewId', controller.authenticateDevice, controller.media);
+router.head('/media/:reviewId', controller.authenticateDevice, controller.media);
+module.exports = router;

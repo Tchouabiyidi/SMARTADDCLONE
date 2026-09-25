@@ -1,0 +1,10 @@
+'use strict';
+const router = require('express').Router();
+const controller = require('../controllers/booking.controller');
+const { authenticate, requireRole } = require('../middleware/auth');
+router.use(authenticate);
+router.get('/', controller.list);
+router.post('/', requireRole('advertiser'), controller.create);
+router.post('/batch-pay', requireRole('advertiser'), controller.batchPay);
+router.post('/:id/payments/mock', requireRole('advertiser'), controller.pay);
+module.exports = router;

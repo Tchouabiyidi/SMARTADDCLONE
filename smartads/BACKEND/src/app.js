@@ -1,0 +1,18 @@
+'use strict';
+const express = require('express');
+const { cors } = require('./middleware/cors');
+const { errorHandler, notFound } = require('./middleware/errors');
+const app = express();
+app.disable('x-powered-by');
+app.use(cors);
+app.use(express.json({ limit: '2mb' }));
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', app: 'SMARTADS API' }));
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/billboards', require('./routes/billboard.routes'));
+app.use('/api/bookings', require('./routes/booking.routes'));
+app.use('/api/videos', require('./routes/video.routes'));
+app.use('/api/admin', require('./routes/admin.routes'));
+app.use('/api/tv', require('./routes/tv.routes'));
+app.use(notFound);
+app.use(errorHandler);
+module.exports = { app };
